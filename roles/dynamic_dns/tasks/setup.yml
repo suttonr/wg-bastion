@@ -1,0 +1,21 @@
+---
+- name: dynamic_dns | setup | Install packages 
+  apt:
+    name: 
+      - ddclient
+    cache_valid_time: 600
+    state: present
+
+- name: dynamic_dns | setup | Install ddclient Config
+  template:
+    src: templates/ddclient.conf.j2
+    dest: /etc/ddclient.conf
+  notify:
+    - "dynamic_dns : Restart ddclient"
+
+- name: dynamic_dns | setup | Enable ddclient Service
+  systemd:
+    name: ddclient.service
+    state: started
+    enabled: true
+    

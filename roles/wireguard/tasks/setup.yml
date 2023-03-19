@@ -1,0 +1,21 @@
+---
+- name: wireguard | setup | Install packages 
+  apt:
+    name: 
+      - wireguard
+    cache_valid_time: 600
+    state: present
+
+- name: wireguard | setup | Install wg0 Config
+  template:
+    src: templates/wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+  notify:
+    - "wireguard : Restart wg0"
+
+- name: wireguard | setup | Enable wg0 Service
+  systemd:
+    name: wg-quick@wg0.service
+    state: started
+    enabled: true
+    

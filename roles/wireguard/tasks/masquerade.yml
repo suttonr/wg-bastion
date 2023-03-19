@@ -1,0 +1,23 @@
+---
+- name: wireguard | masquerade | Enable ip forwarding
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: wireguard | masquerade | Enable forwarding on wg0
+  ansible.builtin.iptables:
+    chain: FORWARD
+    in_interface: wg0
+    jump: ACCEPT
+
+- name: wireguard | masquerade | Enable masquerade on wg0
+  ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    source: "{{ wg_network }}"
+    out_interface: eth0
+    jump: MASQUERADE
+    comment: masquerade traffic from wireguard interface

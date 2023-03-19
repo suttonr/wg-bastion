@@ -1,0 +1,11 @@
+[Interface]
+ListenPort = {{ wg_port }}
+Address = {{ wg_address }}
+PrivateKey = {{ wg_private_key }}
+
+{% for item in wg_peers %}
+[Peer]
+PublicKey = {{ item.public_key }}
+PresharedKey = {{ item.psk }}
+AllowedIPs = {{ item.ip }}
+{% endfor %}

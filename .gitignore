@@ -1,0 +1,5 @@
+.terraform*
+terraform.*
+inventory
+group_vars/*
+local_*
